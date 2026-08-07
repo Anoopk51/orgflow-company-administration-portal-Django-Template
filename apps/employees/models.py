@@ -30,13 +30,13 @@ class Employee(models.Model):
 
     # Organization
     ''' <-----------x-------------x-----------------> '''
-    # department = models.ForeignKey(
-    #     "departments.Department",
-    #     on_delete=models.SET_NULL,
-    #     null=True,
-    #     blank=True,
-    #     related_name="employees",
-    # )
+    department = models.ForeignKey(
+        "departments.Department",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="employees",
+    )
 
     manager = models.ForeignKey(
         "self",
@@ -84,6 +84,15 @@ class Employee(models.Model):
         auto_now=True,
     )
 
+    team= models.ForeignKey(
+        'teams.Team',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='employees',
+
+        )
+    
     class Meta:
         ordering = ["employee_id"]
         verbose_name = "Employee"
