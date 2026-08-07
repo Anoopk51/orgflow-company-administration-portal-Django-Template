@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 
 .env
+.env.*
+*.env
+
+logs/*.log
 
 db.sqlite3
 
