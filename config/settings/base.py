@@ -52,6 +52,10 @@ INSTALLED_APPS = [
     "apps.employees",
     "apps.departments",
     "apps.teams",
+    "apps.projects",
+    "apps.notifications",
+    "apps.tasks"
+
 ]
 
 MIDDLEWARE = [
