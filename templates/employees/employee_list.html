@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Employees | OrgFlow{% endblock %}
+
+{% block content %}
+
+<div class="card-panel">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">Employees</h2>
+        <a href="{% url 'create_employee' %}" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-circle"></i> Create Employee
+        </a>
+    </div>
+
+    <hr>
+
+    {% if employees %}
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Employee ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Department</th>
+                    <th>Manager</th>
+                    <th>Status</th>
+                    <th>Joining Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for employee in employees %}
+                <tr>
+                    <td>
+                        <a href="{% url 'employee_detail' employee.employee_id %}">
+                            {{ employee.employee_id }}
+                        </a>
+                    </td>
+
+                    <td>
+                        {{ employee.user.first_name }}
+                        {{ employee.user.last_name }}
+                    </td>
+
+                    <td>{{ employee.user.email }}</td>
+
+                    <td>{{ employee.department }}</td>
+
+                    <td>
+                        {% if employee.manager %}
+                            {{ employee.manager.user.email }}
+                        {% else %}
+                            &mdash;
+                        {% endif %}
+                    </td>
+
+                    <td><span class="badge bg-secondary">{{ employee.get_status_display }}</span></td>
+
+                    <td>{{ employee.joining_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+
+    <p class="text-muted">No employees found.</p>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %} Dashboard | OrgFlow {% endblock %}
+
+
+{% block content %}
+
+<div class="card-panel">
+    <h2 class="mb-3">Dashboard</h2>
+
+    <p>Welcome to OrgFlow.</p>
+
+    <p>
+        Logged in as:
+        <strong>{{ request.user.email }}</strong>
+    </p>
+</div>
+
+{% endblock %}
