@@ -39,3 +39,14 @@ class CreateEmployeeForm(forms.ModelForm):
                             employee_profile__isnull = True)
         # Only existing employees can be selected as managers
         self.fields["manager"].queryset = Employee.objects.all()
+
+# this is self profile edit purpose.
+class EmployeeProfileUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Employee
+        fields = [
+            "phone_number",
+            "profile_photo",
+            "date_of_birth",
+        ]

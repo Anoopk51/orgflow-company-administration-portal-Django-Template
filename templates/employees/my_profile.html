@@ -59,8 +59,16 @@
                 <th>Phone</th>
                 <td>{{ employee.phone_number }}</td>
             </tr>
+            <tr>
+                <th>Date of Birth</th>
+                <td>{{ employee.date_of_birth|default:"—" }}</td>
+            </tr>
         </tbody>
     </table>
+
+    <a href="{% url 'update_my_profile' %}" class="btn btn-primary">
+        <i class="bi bi-pencil-square"></i> Edit My Profile
+    </a>
 
 </div>
 

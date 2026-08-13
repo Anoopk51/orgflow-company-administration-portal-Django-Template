@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from .managers import UserManager
+
 '''
 AbstractUser gives us Django's complete authentication system
 '''
@@ -30,7 +31,7 @@ class User(AbstractUser): # Why inherit? because no need to rebuild authenticati
                             default=Role.EMPLOYEE,
                             db_index=True,
                             help_text="Aplication role used for authorization",
-                            )  # because of RBAC it means after login --> Role---> Authorization.
+                            )  # because of RBAC it means after login --> Role---> Auth+++++orization.
     objects  = UserManager() # Create manager
     USERNAME_FIELD = 'email'
 

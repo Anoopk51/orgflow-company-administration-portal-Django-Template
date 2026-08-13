@@ -3,7 +3,7 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import render , redirect
 from .models import Employee , EmployeeStatus
 from apps.accounts.models import Role
-from .forms import CreateEmployeeForm
+from .forms import CreateEmployeeForm , EmployeeProfileUpdateForm
 from django.shortcuts import get_object_or_404
 
 # Create your views here.
@@ -57,11 +57,7 @@ def employee_list(request):
             "You are not allowed to view employees."
         )
 
-    employees = Employee.objects.select_related(
-        "user",
-        "department",
-        "manager",
-    ).all()
+    employees = Employee.objects.select_related("user", "department", "manager",).all()
 
     return render(
         request,
@@ -98,22 +94,32 @@ def my_profile(request):
 @login_required
 def update_employee(request,employee_id):
 
-    if request.user.role not in [Role.SUPER_ADMIN , Role.ADMIN]:
-        return HttpResponseForbidden("You are not allowed to update employees.")
-
     employee = get_object_or_404(Employee.objects.select_related("user","department","manager",),employee_id = employee_id,)
+
+    if request.user.role  in [Role.SUPER_ADMIN ,Role.ADMIN]:
+        allowed = True
+
+    elif(request.user.role == Role.EMPLOYEE and employee.user == request.user):
+        allowed =  True
+
+    else:
+        allowed = False
+
+    if not allowed:
+        return HttpResponseForbidden("You are not allowed to update this employee.")
 
     if request.method == "POST":
         form  = CreateEmployeeForm(request.POST ,request.FILES,instance = employee,)
 
         if form.is_valid():
             form.save()
+
             return redirect("employee_detail",employee_id=employee.employee_id,)
 
     else:
         form = CreateEmployeeForm(instance = employee)
 
-    return render(request,"employees/update_employee.html",{"form":form,"employee":employee},)
+    return render(request,"employees/update_employee.html",{"form":form,"employee":employee,},)
 
 # This is for employee status for deactivate employee handle feature.
 
@@ -135,3 +141,36 @@ def deactivate_employee(request,employee_id):
         return redirect("employee_detail",employee_id = employee.employee_id,)
 
     return render(request,"employees/deactivate_employee.html",{"employee":employee},)
+
+
+# this is for self file update.
+@login_required
+def update_my_profile(request):
+
+    employee = get_object_or_404(
+        Employee,
+        user=request.user,
+    )
+
+    if request.method == "POST":
+        form = EmployeeProfileUpdateForm(
+            request.POST,
+            request.FILES,
+            instance=employee,
+        )
+
+        if form.is_valid():
+            form.save()
+
+            return redirect("my_profile")
+
+    else:
+        form = EmployeeProfileUpdateForm(
+            instance=employee,
+        )
+
+    return render(
+        request,
+        "employees/update_my_profile.html",
+        {"form": form},
+    )
