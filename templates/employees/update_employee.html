@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Update Employee | OrgFlow{% endblock %}
+
+{% block content %}
+
+<div class="card-panel" style="max-width: 700px; margin: 0 auto;">
+
+    <h2 class="mb-4">Update Employee</h2>
+
+    <form method="post" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        <div class="mb-3">
+            {{ form.user.label_tag }}
+            {{ form.user }}
+            {{ form.user.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.department.label_tag }}
+            {{ form.department }}
+            {{ form.department.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.manager.label_tag }}
+            {{ form.manager }}
+            {{ form.manager.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.joining_date.label_tag }}
+            {{ form.joining_date }}
+            {{ form.joining_date.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.status.label_tag }}
+            {{ form.status }}
+            {{ form.status.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.phone_number.label_tag }}
+            {{ form.phone_number }}
+            {{ form.phone_number.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.profile_photo.label_tag }}
+            {{ form.profile_photo }}
+            {{ form.profile_photo.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.date_of_birth.label_tag }}
+            {{ form.date_of_birth }}
+            {{ form.date_of_birth.errors }}
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+                Update Employee
+            </button>
+            <a href="{% url 'employee_detail' employee.employee_id %}" class="btn btn-outline-secondary">
+                Cancel
+            </a>
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

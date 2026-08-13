@@ -2,6 +2,7 @@ from django import forms
 
 from .models import Employee
 from apps.accounts.models import User
+from django.db.models import Q
 
 class CreateEmployeeForm(forms.ModelForm):
 
@@ -27,10 +28,14 @@ class CreateEmployeeForm(forms.ModelForm):
     def __init__(self,*args, **kwargs):
         super().__init__(*args , **kwargs)
 
-        # Only Users who don't already have an employee profile.
-        self.fields["user"].queryset = User.objects.filter(
-            employee_profile__isnull = True
-        )
+        if self.instance and self.instance.pk:
+           
+            self.fields["user"].queryset = User.objects.filter(
+                Q(employee_profile__isnull = True) | Q(employee_profile = self.instance)
+            )
 
+        else:
+            self.fields["user"].queryset = User.objects.filter(
+                            employee_profile__isnull = True)
         # Only existing employees can be selected as managers
         self.fields["manager"].queryset = Employee.objects.all()

@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
-{% block title %}Employee {{ employee.employee_id }} | OrgFlow{% endblock %}
+{% block title %}My Profile | OrgFlow{% endblock %}
 
 {% block content %}
 
 <div class="card-panel" style="max-width: 700px; margin: 0 auto;">
 
-    <h2 class="mb-4">Employee Details</h2>
+    <h2 class="mb-4">My Profile</h2>
 
     {% if employee.profile_photo %}
         <div class="mb-4 text-center">
             <img
                 src="{{ employee.profile_photo.url }}"
-                alt="{{ employee.employee_id }}"
+                alt="My Profile"
                 width="150"
                 class="rounded-circle border"
             >
@@ -48,39 +48,19 @@
                 </td>
             </tr>
             <tr>
-                <th>Joining Date</th>
-                <td>{{ employee.joining_date }}</td>
-            </tr>
-            <tr>
                 <th>Status</th>
                 <td><span class="badge bg-secondary">{{ employee.get_status_display }}</span></td>
+            </tr>
+            <tr>
+                <th>Joining Date</th>
+                <td>{{ employee.joining_date }}</td>
             </tr>
             <tr>
                 <th>Phone</th>
                 <td>{{ employee.phone_number }}</td>
             </tr>
-            <tr>
-                <th>Date of Birth</th>
-                <td>{{ employee.date_of_birth|default:"—" }}</td>
-            </tr>
         </tbody>
     </table>
-
-    <div class="d-flex gap-2 flex-wrap">
-        <a href="{% url 'employee_list' %}" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left"></i> Back to Employees
-        </a>
-
-        <a href="{% url 'update_employee' employee.employee_id %}" class="btn btn-primary">
-            <i class="bi bi-pencil-square"></i> Edit Employee
-        </a>
-
-        {% if employee.status != "RESIGNED" and employee.status != "TERMINATED" %}
-            <a href="{% url 'deactivate_employee' employee.employee_id %}" class="btn btn-outline-danger">
-                <i class="bi bi-x-circle"></i> Deactivate Employee
-            </a>
-        {% endif %}
-    </div>
 
 </div>
 
