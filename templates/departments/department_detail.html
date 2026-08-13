@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Department Details | OrgFlow{% endblock %}
+
+{% block content %}
+
+<div class="card-panel" style="max-width: 700px; margin: 0 auto;">
+
+    <div class="d-flex justify-content-between align-items-start mb-4">
+        <h2 class="mb-0">Department Details</h2>
+        {% if department.is_active %}
+            <span class="badge bg-success">Active</span>
+        {% else %}
+            <span class="badge bg-secondary">Inactive</span>
+        {% endif %}
+    </div>
+
+    <table class="table table-borderless">
+        <tbody>
+            <tr>
+                <th style="width: 200px;">Name</th>
+                <td>{{ department.name }}</td>
+            </tr>
+            <tr>
+                <th>Code</th>
+                <td>{{ department.code }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ department.description|default:"—" }}</td>
+            </tr>
+            <tr>
+                <th>Head</th>
+                <td>
+                    {% if department.head %}
+                        {{ department.head.user.first_name }} {{ department.head.user.last_name }}
+                        ({{ department.head.user.email }})
+                    {% else %}
+                        &mdash;
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3 class="h5 mt-4 mb-3">Employees</h3>
+
+    {% if employees %}
+        <ul class="list-group mb-3">
+            {% for employee in employees %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ employee.employee_id }} &mdash; {{ employee.user.email }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-muted">No employees assigned to this department.</p>
+    {% endif %}
+
+    <div class="d-flex gap-2">
+        <a href="{% url 'department_list' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Departments
+        </a>
+
+        <a href="{% url 'update_department' department.id %}" class="btn btn-primary">
+            <i class="bi bi-pencil-square"></i> Edit Department
+        </a>
+
+        {% if department.is_active %}
+            <a href="{% url 'deactivate_department' department.id %}" class="btn btn-outline-danger">
+                <i class="bi bi-x-circle"></i> Deactivate Department
+            </a>
+        {% else %}
+            <a href="{% url 'activate_department' department.id %}" class="btn btn-outline-danger">
+                Activate Department </a>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}
