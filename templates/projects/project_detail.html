@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Project Details | OrgFlow{% endblock %}
+
+{% block content %}
+
+<div class="card-panel" style="max-width: 700px; margin: 0 auto;">
+
+    <div class="d-flex justify-content-between align-items-start mb-4">
+        <h2 class="mb-0">Project Details</h2>
+        {% if project.is_active %}
+            <span class="badge bg-success">Active</span>
+        {% else %}
+            <span class="badge bg-secondary">Inactive</span>
+        {% endif %}
+    </div>
+
+    <table class="table table-borderless">
+        <tbody>
+            <tr>
+                <th style="width: 200px;">Name</th>
+                <td>{{ project.name }}</td>
+            </tr>
+            <tr>
+                <th>Code</th>
+                <td>{{ project.code }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ project.description|default:"—" }}</td>
+            </tr>
+            <tr>
+                <th>Project Manager</th>
+                <td>
+                    {% if project.project_manager %}
+                        {{ project.project_manager.user.email }}
+                    {% else %}
+                        &mdash;
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td><span class="badge bg-info text-dark">{{ project.get_status_display }}</span></td>
+            </tr>
+            <tr>
+                <th>Start Date</th>
+                <td>{{ project.start_date }}</td>
+            </tr>
+            <tr>
+                <th>End Date</th>
+                <td>{{ project.end_date|default:"—" }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3 class="h5 mt-4 mb-3">Teams</h3>
+
+    {% if project.teams.all %}
+        <ul class="list-group mb-3">
+            {% for team in project.teams.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ team.name }} &mdash; {{ team.department.name }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-muted">No teams assigned to this project.</p>
+    {% endif %}
+
+    <div class="d-flex gap-2">
+        <a href="{% url 'project_list' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Projects
+        </a>
+
+        <a href="{% url 'update_project' project.id %}" class="btn btn-primary">
+            <i class="bi bi-pencil-square"></i> Edit Project
+        </a>
+
+        {% if project.is_active %}
+            <a href="{% url 'deactivate_project' project.id %}" class="btn btn-outline-danger">
+                <i class="bi bi-x-circle"></i> Deactivate Project
+            </a>
+        {% else %}
+            <a href="{% url 'activate_project' project.id %}" class="btn btn-outline-success">
+                <i class="bi bi-check-circle"></i> Activate Project
+            </a>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

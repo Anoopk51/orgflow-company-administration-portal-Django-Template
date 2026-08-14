@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Deactivate Project | OrgFlow{% endblock %}
+
+{% block content %}
+
+<div class="card-panel" style="max-width: 600px; margin: 0 auto;">
+
+    <h2 class="mb-4 text-danger">
+        <i class="bi bi-exclamation-triangle-fill"></i> Deactivate Project
+    </h2>
+
+    <div class="alert alert-warning">
+        <p class="mb-0">
+            Are you sure you want to deactivate
+            <strong>{{ project.name }}</strong>?
+        </p>
+    </div>
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-danger">
+                <i class="bi bi-x-circle"></i> Confirm Deactivate
+            </button>
+            <a href="{% url 'project_detail' project.id %}" class="btn btn-outline-secondary">
+                Cancel
+            </a>
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

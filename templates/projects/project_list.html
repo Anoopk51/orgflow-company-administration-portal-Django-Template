@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Projects | OrgFlow{% endblock %}
+
+{% block content %}
+
+<div class="card-panel">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">Projects</h2>
+        <a href="{% url 'create_project' %}" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-circle"></i> Create Project
+        </a>
+    </div>
+
+    <hr>
+
+    {% for project in projects %}
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <h3 class="h5 mb-1"><a href="{% url 'project_detail' project.id %}">{{ project.name }}</a></h3>
+                    {% if project.is_active %}
+                        <span class="badge bg-success">Active</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Inactive</span>
+                    {% endif %}
+                </div>
+
+                <p class="mb-1">
+                    <strong>Code:</strong>
+                    {{ project.code }}
+                </p>
+
+                <p class="mb-1">
+                    <strong>Project Manager:</strong>
+                    {% if project.project_manager %}
+                        {{ project.project_manager.user.email }}
+                    {% else %}
+                        &mdash;
+                    {% endif %}
+                </p>
+
+                <p class="mb-1">
+                    <strong>Status:</strong>
+                    <span class="badge bg-info text-dark">{{ project.get_status_display }}</span>
+                </p>
+
+                <p class="mb-1">
+                    <strong>Start Date:</strong>
+                    {{ project.start_date }}
+                </p>
+
+                <p class="mb-1">
+                    <strong>End Date:</strong>
+                    {{ project.end_date|default:"—" }}
+                </p>
+
+                <p class="mb-0">
+                    <strong>Teams:</strong>
+                    {% for team in project.teams.all %}
+                        {{ team.name }}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        No teams assigned.
+                    {% endfor %}
+                </p>
+            </div>
+        </div>
+
+    {% empty %}
+
+        <p class="text-muted">No projects found.</p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}
