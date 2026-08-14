@@ -23,6 +23,7 @@ class Team(models.Model):
         related_name="leading_team",
     )
 
+    members = models.ManyToManyField("employees.Employee",related_name="teams",blank=True,)
     description = models.TextField(
         blank=True,
     )
