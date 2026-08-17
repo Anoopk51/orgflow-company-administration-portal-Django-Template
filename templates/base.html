@@ -135,7 +135,12 @@
             <a href="{% url 'team_list' %}"><i class="bi bi-diagram-2 me-2"></i>Teams</a>
             <a href="{% url 'project_list' %}"><i class="bi bi-kanban-fill me-2"></i>Projects</a>
             <a href="{% url 'task_list' %}"><i class="bi bi-check2-square me-2"></i>Tasks</a>
-            <a href="#"><i class="bi bi-bell-fill me-2"></i>Notifications</a>
+            <a href="{% url 'notification_list' %}"><i class="bi bi-bell-fill me-2"></i>Notifications
+            {% if unread_notification_count > 0 %}
+             <span class="badge bg-danger">
+                {{ unread_notification_count }}
+            </span>
+            {% endif %}</a>
         </nav>
 
         <main class="orgflow-main">

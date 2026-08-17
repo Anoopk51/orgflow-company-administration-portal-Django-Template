@@ -33,6 +33,8 @@ urlpatterns = [
     path("dashboard/",include("apps.projects.urls"),),
 
     path("dashboard/",include("apps.tasks.urls"),),
+
+    path("dashboard/",include("apps.notifications.urls"),),
 ]
 
 if settings.DEBUG:

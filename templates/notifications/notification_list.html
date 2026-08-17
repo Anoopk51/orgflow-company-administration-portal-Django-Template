@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Notifications | OrgFlow{% endblock %}
+
+{% block content %}
+
+<div class="card-panel">
+
+    <h2 class="mb-3">
+        Notifications
+        {% if unread_count %}
+            <span class="badge bg-primary">{{ unread_count }} unread</span>
+        {% endif %}
+    </h2>
+
+    <hr>
+
+    {% for notification in notifications %}
+
+        <div class="card mb-3 {% if not notification.is_read %}border-primary{% endif %}">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <h4 class="h6 mb-1">{{ notification.title }}</h4>
+                    {% if notification.is_read %}
+                        <span class="badge bg-secondary">Read</span>
+                    {% else %}
+                        <span class="badge bg-primary">Unread</span>
+                    {% endif %}
+                </div>
+
+                <p class="mb-2">{{ notification.message }}</p>
+
+                <p class="mb-1">
+                    <strong>Type:</strong>
+                    {{ notification.get_notification_type_display }}
+                </p>
+
+                <small class="text-muted">{{ notification.created_at }}</small>
+
+                {% if not notification.is_read %}
+                    <form
+                        method="post"
+                        action="{% url 'mark_notification_read' notification.id %}"
+                        class="mt-2"
+                    >
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-check2"></i> Mark as Read
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+
+    {% empty %}
+
+        <p class="text-muted">No notifications found.</p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

@@ -5,6 +5,7 @@ from django.shortcuts import render ,redirect , get_object_or_404
 from apps.accounts.models import Role
 from .forms import TaskForm ,TaskStatusForm
 from .models import Task
+from apps.notifications.models import (Notification , NotificationType)
 
 # Create your views here.
 
@@ -19,8 +20,10 @@ def create_task(request):
         form = TaskForm(request.POST)
 
         if form.is_valid():
-            form.save()
+            task = form.save()
 
+            if task.assigned_to:
+                Notification.objects.create(recipient=task.assigned_to.user,notification_type = NotificationType.TASK_ASSIGNED,title="New Task Assigned",message = f"You have been assigned the task: {task.title}",)
             return redirect("task_list")
     else:
         form = TaskForm()
@@ -44,6 +47,7 @@ def task_list(request):
 
 # This is task details 
 
+@login_required
 def task_detail(request,task_id):
 
     task = get_object_or_404(Task.objects.select_related("project","assigned_to",),id = task_id,)
@@ -79,8 +83,22 @@ def update_task(request,task_id):
             form = TaskForm(request.POST,instance = task,)
 
             if form.is_valid():
-                form.save()
-                return redirect("task_detail",task_id = task.id,)
+
+                old_assigned_to = task.assigned_to
+
+                task = form.save()
+
+                new_assigned_to = task.assigned_to
+
+                if (new_assigned_to and new_assigned_to != old_assigned_to):
+                    Notification.objects.create(
+                        recipient=new_assigned_to.user,
+                        notification_type=NotificationType.TASK_ASSIGNED,
+                        title="New Task Assigned",
+                        message=f"You have been assigned the task: {task.title}",
+                    )
+
+                return redirect("task_detail",task_id=task.id,)
 
         else:
             form = TaskForm(instance= task,)
@@ -105,6 +123,7 @@ def update_task(request,task_id):
 
     else:
         return HttpResponseForbidden("You are not allowed to update tasks.")
+    
 # This is for delete the task
 
 @login_required
