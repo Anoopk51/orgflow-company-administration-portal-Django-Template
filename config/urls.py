@@ -31,6 +31,8 @@ urlpatterns = [
     path("dashboard/",include("apps.teams.urls"),),
 
     path("dashboard/",include("apps.projects.urls"),),
+
+    path("dashboard/",include("apps.tasks.urls"),),
 ]
 
 if settings.DEBUG:

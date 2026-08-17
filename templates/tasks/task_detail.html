@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Task Details | OrgFlow{% endblock %}
+
+{% block content %}
+
+<div class="card-panel" style="max-width: 700px; margin: 0 auto;">
+
+    <div class="d-flex justify-content-between align-items-start mb-4">
+        <h2 class="mb-0">Task Details</h2>
+        <span class="badge bg-warning text-dark">{{ task.get_priority_display }}</span>
+    </div>
+
+    <table class="table table-borderless">
+        <tbody>
+            <tr>
+                <th style="width: 200px;">Title</th>
+                <td>{{ task.title }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ task.description|default:"—" }}</td>
+            </tr>
+            <tr>
+                <th>Project</th>
+                <td>{{ task.project.name }}</td>
+            </tr>
+            <tr>
+                <th>Assigned To</th>
+                <td>
+                    {% if task.assigned_to %}
+                        {{ task.assigned_to.user.email }}
+                    {% else %}
+                        &mdash;
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td><span class="badge bg-info text-dark">{{ task.get_status_display }}</span></td>
+            </tr>
+            <tr>
+                <th>Due Date</th>
+                <td>{{ task.due_date|default:"—" }}</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{{ task.created_at }}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{{ task.updated_at }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="d-flex gap-2">
+        <a href="{% url 'task_list' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Tasks
+        </a>
+
+        <a href="{% url 'update_task' task.id %}" class="btn btn-primary">
+            <i class="bi bi-pencil-square"></i> Edit Task
+        </a>
+
+        <a href="{% url 'delete_task' task.id %}" class="btn btn-outline-danger">
+            <i class="bi bi-trash"></i> Delete Task
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}
